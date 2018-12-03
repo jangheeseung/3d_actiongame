@@ -45,7 +45,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Player\Character Move.cs" />
+     <Compile Include="Assets\Script\AttackArea.cs" />
+     <Compile Include="Assets\Script\AttackAreaActivator.cs" />
+     <Compile Include="Assets\Script\CharaAnimation.cs" />
+     <Compile Include="Assets\Script\CharacterMove.cs" />
+     <Compile Include="Assets\Script\CharacterStatus.cs" />
+     <Compile Include="Assets\Script\FollowCamera.cs" />
+     <Compile Include="Assets\Script\HitArea.cs" />
+     <Compile Include="Assets\Script\InputManager.cs" />
+     <Compile Include="Assets\Script\PlayerCtrl.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
