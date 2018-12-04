@@ -2,32 +2,40 @@
 using System.Collections;
 
 public class PlayerCtrl : MonoBehaviour {
+
 	const float RayCastMaxDistance = 100.0f;
 	CharacterStatus status;
 	CharaAnimation charaAnimation;
 	Transform attackTarget;
 	InputManager inputManager;
-	public float attackRange=1.5f;
-	// Use this for initialization
+//	GameRuleCtrl gameRuleCtrl;
+	public float attackRange = 1.5f;
 
-	enum State{
+	// 스테이트의 종류.
+	enum State
+	{
 		Walking,
 		Attacking,
 		Died,
 	};
 
-	State state=State.Walking;
-	State nextState=State.Walking;
+	// 현재 스테이트.
+	State state = State.Walking;
+	// 다음 스테이트.
+	State nextState = State.Walking;
 
-	void Start () {
-		status = GetComponent<CharacterStatus> ();
-		charaAnimation = GetComponent<CharaAnimation> ();
+	// Use this for initialization
+	void Start()
+	{
+		status = GetComponent<CharacterStatus>();
+		charaAnimation = GetComponent<CharaAnimation>();
 		inputManager = FindObjectOfType<InputManager>();
+//	gameRuleCtrl = FindObjectOfType<GameRuleCtrl> ();
 	}
 
 	// Update is called once per frame
-	void Update () {
-
+	void Update()
+	{
 		switch (state) {
 		case State.Walking:
 			Walking ();
@@ -37,10 +45,12 @@ public class PlayerCtrl : MonoBehaviour {
 			break;
 		}
 
+		// 스테이트를 변경한다.
 		if (state != nextState) {
 			state = nextState;
-			switch(state){
+			switch (state) {
 			case State.Walking:
+				// 스테이트 초기화 함수를 호출한다.
 				WalkStart ();
 				break;
 			case State.Attacking:
@@ -52,75 +62,86 @@ public class PlayerCtrl : MonoBehaviour {
 			}
 		}
 	}
-	void ChangeState(State nextState){
+
+	// 스테이트를 변경한다.
+	void ChangeState(State nextState)
+	{
 		this.nextState = nextState;
 	}
 
-	void WalkStart(){
+	void WalkStart()
+	{
 		StateStartCommon();
 	}
-		
 
 	void Walking()
 	{
 		if (inputManager.Clicked()) {
-
-			Ray ray = Camera.main.ScreenPointToRay (inputManager.GetCursorPosition ());
+			// RayCast로 대상물을 조사한다.
+			Ray ray = Camera.main.ScreenPointToRay(inputManager.GetCursorPosition());
 			RaycastHit hitInfo;
-			//Vector2 clickPos = inputManager.GetCursorPosition();
-			// RRayCast로 대상물을 조사한다.
-			if(Physics.Raycast(ray,out hitInfo,RayCastMaxDistance,(1 << LayerMask.NameToLayer("Ground"))
-				|(1<<LayerMask.NameToLayer("EmemyHit")))) {
-
-				if(hitInfo.collider.gameObject.layer==LayerMask.NameToLayer("Ground"))
-				SendMessage("SetDestination",hitInfo.point);
-
-				if (hitInfo.collider.gameObject.layer == LayerMask.NameToLayer ("EnemyHit")) {
-				
+			if (Physics.Raycast(ray,out hitInfo,RayCastMaxDistance,(1<<LayerMask.NameToLayer("Ground"))|(1<<LayerMask.NameToLayer("EnemyHit")))) {
+				// 지면이 클릭되었다.
+				if (hitInfo.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
+					SendMessage("SetDestination",hitInfo.point);
+				// 적이 클릭되었다.
+				if (hitInfo.collider.gameObject.layer == LayerMask.NameToLayer("EnemyHit")) {
+					// 수평 거리를 체크해서 공격할지 결정한다.
 					Vector3 hitPoint = hitInfo.point;
 					hitPoint.y = transform.position.y;
-					float distance = Vector3.Distance (hitPoint, transform.position);
-
+					float distance = Vector3.Distance(hitPoint,transform.position);
 					if (distance < attackRange) {
+						// 공격.
 						attackTarget = hitInfo.collider.transform;
-						ChangeState (State.Attacking);
-					} else {
-						SendMessage ("SetDestionation", hitInfo.point);
-					}
+						ChangeState(State.Attacking);
+					} else
+						SendMessage("SetDestination",hitInfo.point);
 				}
 			}
 		}
 	}
 
-	void AttackStart(){
-		StateStartCommon ();
+	// 공격 스테이트가 시작되기 전에 호출된다.
+	void AttackStart()
+	{
+		StateStartCommon();
 		status.attacking = true;
 
+		// 적 방향으로 돌아보게 한다.
 		Vector3 targetDirection = (attackTarget.position - transform.position).normalized;
-		SendMessage ("SetDirection", targetDirection);
+		SendMessage("SetDirection", targetDirection);
 
-		SendMessage ("StopMove");
+		// 이동을 멈춘다.
+		SendMessage("StopMove");
 	}
 
-	void Attacking(){
+	// 공격 중 처리.
+	void Attacking()
+	{
 		if(charaAnimation.IsAttacked())
 			ChangeState(State.Walking);
 	}
 
-	void Died(){
+	void Died()
+	{
 		status.died = true;
+	//	gameRuleCtrl.GameOver ();
 	}
 
 	void Damage(AttackArea.AttackInfo attackInfo)
 	{
 		status.HP -= attackInfo.attackPower;
-		if (status.HP <= 0) {
+		if(status.HP <= 0)
+		{
 			status.HP = 0;
-			ChangeState (State.Died);
+			// 체력이 0이므로 사망 스테이트로 전환한다.
+			ChangeState(State.Died);
 		}
 	}
 
-	void StateStartCommon(){
+	// 스테이트가 시작되기 전에 status를 초기화한다.
+	void StateStartCommon()
+	{
 		status.attacking = false;
 		status.died = false;
 	}
