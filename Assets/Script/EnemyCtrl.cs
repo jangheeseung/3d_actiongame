@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Audio;
 
 public class EnemyCtrl : MonoBehaviour {
 	CharacterStatus status;
 	CharaAnimation charaAnimation;
 	CharacterMove characterMove;
 	Transform attackTarget;
-
 	// 대기 시간은 2초로 설정한다.
 	public float waitBaseTime = 2.0f;
 	// 남은 대기 시간.
@@ -181,8 +181,8 @@ public class EnemyCtrl : MonoBehaviour {
 		status.HP -= attackInfo.attackPower;
 		if (status.HP <= 0) {
 			status.HP = 0;
-			// 체력이 0이므로 사망 스테이트로 전환한다.
 			ChangeState(State.Died);
+			GetComponent<AudioSource> ().Play ();
 		}
 	}
 

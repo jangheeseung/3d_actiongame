@@ -2,13 +2,11 @@
 using System.Collections;
 
 public class PlayerCtrl : MonoBehaviour {
-
 	const float RayCastMaxDistance = 100.0f;
 	CharacterStatus status;
 	CharaAnimation charaAnimation;
 	Transform attackTarget;
 	InputManager inputManager;
-//	GameRuleCtrl gameRuleCtrl;
 	public float attackRange = 1.5f;
 
 	// 스테이트의 종류.
@@ -30,7 +28,7 @@ public class PlayerCtrl : MonoBehaviour {
 		status = GetComponent<CharacterStatus>();
 		charaAnimation = GetComponent<CharaAnimation>();
 		inputManager = FindObjectOfType<InputManager>();
-//	gameRuleCtrl = FindObjectOfType<GameRuleCtrl> ();
+		//gameRuleCtrl = FindObjectOfType<GameRuleCtrl> ();
 	}
 
 	// Update is called once per frame
@@ -146,3 +144,8 @@ public class PlayerCtrl : MonoBehaviour {
 		status.died = false;
 	}
 }
+
+
+
+
+

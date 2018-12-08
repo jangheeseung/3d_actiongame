@@ -3,6 +3,7 @@ using System.Collections;
 
 public class SearchArea : MonoBehaviour {
 	EnemyCtrl enemyCtrl;
+
 	void Start()
 	{
 		// EnemyCtrl을 미리 준비한다.
