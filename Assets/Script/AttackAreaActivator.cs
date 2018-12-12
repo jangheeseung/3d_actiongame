@@ -34,7 +34,7 @@ public class AttackAreaActivator : MonoBehaviour {
 	}
 
 	// 애니메이션 이벤트의 EndAttackHit로 컬라이더를 무효로 한다.
-	void EndAttackHit()
+	void EndAttack()
 	{
 		foreach(Collider attackAreaCollider in attackAreaColliders)
 			attackAreaCollider.enabled = false;

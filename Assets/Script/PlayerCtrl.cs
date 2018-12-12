@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class PlayerCtrl : MonoBehaviour {
 	const float RayCastMaxDistance = 100.0f;
@@ -59,8 +60,9 @@ public class PlayerCtrl : MonoBehaviour {
 				break;
 			}
 		}
-	}
 
+	}
+		
 	// 스테이트를 변경한다.
 	void ChangeState(State nextState)
 	{
@@ -136,6 +138,7 @@ public class PlayerCtrl : MonoBehaviour {
 			ChangeState(State.Died);
 		}
 	}
+		
 
 	// 스테이트가 시작되기 전에 status를 초기화한다.
 	void StateStartCommon()

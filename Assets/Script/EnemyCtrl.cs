@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
 
 public class EnemyCtrl : MonoBehaviour {
 	CharacterStatus status;
@@ -173,7 +174,20 @@ public class EnemyCtrl : MonoBehaviour {
 	{
 		status.died = true;
 		dropItem();
-		Destroy(gameObject);
+		GetComponent<AudioSource> ().Play ();
+		Destroy(gameObject,0.6f);
+
+		GameObject Dragon = GameObject.Find ("Dragon");
+		if(Dragon.GetComponent<CharacterStatus>().HP==0) {
+			Debug.Log ("Clear");
+			SceneManager.LoadScene ("GameClear");
+		}
+			
+		GameObject SPIDER = GameObject.Find ("SPIDER");
+		if(SPIDER.GetComponent<CharacterStatus>().HP==0) {
+			Debug.Log ("Clear");
+			SceneManager.LoadScene ("GameClear2");
+		}
 	}
 
 	void Damage(AttackArea.AttackInfo attackInfo)
@@ -182,9 +196,9 @@ public class EnemyCtrl : MonoBehaviour {
 		if (status.HP <= 0) {
 			status.HP = 0;
 			ChangeState(State.Died);
-			GetComponent<AudioSource> ().Play ();
 		}
 	}
+		
 
 	// 스테이트가 시작되기 전에 스테이터스를 초기화한다.
 	void StateStartCommon()

@@ -13,12 +13,14 @@ public class GameDirector : MonoBehaviour {
 		Player = GameObject.Find ("Player");
 	}
 
+
 	void Update () {
 	
 		hpGage.GetComponent<Image> ().fillAmount = Player.GetComponent<CharacterStatus> ().HP/100f;
-
-		if(hpGage.GetComponent<Image>().fillAmount==0)
+		if(Player.GetComponent<CharacterStatus>().HP==0)
+	//	if(hpGage.GetComponent<Image>().fillAmount==0)
 			SceneManager.LoadScene ("GameOverScene");
 
 	}
+		
 } 
