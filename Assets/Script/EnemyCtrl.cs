@@ -177,16 +177,14 @@ public class EnemyCtrl : MonoBehaviour {
 		GetComponent<AudioSource> ().Play ();
 		Destroy(gameObject,0.6f);
 
-		GameObject Dragon = GameObject.Find ("Dragon");
-		if(Dragon.GetComponent<CharacterStatus>().HP==0) {
+	
+		if(GetComponent<CharacterStatus>().HP==0) {
 			Debug.Log ("Clear");
-			SceneManager.LoadScene ("GameClear");
-		}
-			
-		GameObject SPIDER = GameObject.Find ("SPIDER");
-		if(SPIDER.GetComponent<CharacterStatus>().HP==0) {
-			Debug.Log ("Clear");
-			SceneManager.LoadScene ("GameClear2");
+			if (this.gameObject.tag == "dragon")
+				SceneManager.LoadScene ("GameClear");
+			else if (this.gameObject.tag == "spider")
+				SceneManager.LoadScene("GameClear2");
+				
 		}
 	}
 
